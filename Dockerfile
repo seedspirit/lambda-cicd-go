@@ -16,4 +16,5 @@ COPY --from=build /main /main
 RUN yum install git -y
 RUN git clone https://github.com/seedspirit/lambda-cicd-go.git
 RUN cp lambda-cicd-go/main.go /var/task/
-CMD ["main.main"]
+ENTRYPOINT ["main"]
+CMD ["main"]
