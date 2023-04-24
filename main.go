@@ -34,7 +34,10 @@ func main() {
 
 	}
 
+	// 최종결과물 바탕으로 json 파일 생성
 	fmt.Println(INFO)
+	writeFile(INFO)
+
 	end := time.Since(start)
 	fmt.Println("총 실행 시간 : ", end)
 }
@@ -77,8 +80,6 @@ func run(num int) {
 		})
 	}
 
-	writeFile(INFO)
-
 }
 
 func scrapeNavercode(code int, baseURL string, c chan<- extractedInfo) {
@@ -107,8 +108,7 @@ func scrapeNavercode(code int, baseURL string, c chan<- extractedInfo) {
 		naverCode: code}
 }
 
-// map을 json 형태로 변환 후 "연_월_일_subwayinformation.json" 이름 형식으로 저장
-func writeFile(INFO map[string][]map[string]interface{}) {
+func makingFileName() string {
 	loc, err := time.LoadLocation("Asia/Seoul")
 	if err != nil {
 		panic(err)
@@ -116,8 +116,14 @@ func writeFile(INFO map[string][]map[string]interface{}) {
 	now := time.Now()
 	t := now.In(loc)
 	fileTime := t.Format("2006_01_02")
-
 	fileName := fileTime + "_subway_information.json"
+
+	return fileName
+}
+
+// map을 json 형태로 변환 후 "연_월_일_subwayinformation.json" 이름 형식으로 저장
+func writeFile(INFO map[string][]map[string]interface{}) {
+	fileName := makingFileName()
 	content, _ := json.MarshalIndent(INFO, "", " ")
 	_ = os.WriteFile(fileName, content, 0644)
 }
