@@ -23,6 +23,6 @@ RUN go mod download
 RUN go build -o main .
 
 FROM public.ecr.aws/lambda/provided:al2
-COPY --from=build /var/task/main .
+COPY --from=build /var/task/main /var/task/main
 
-ENTRYPOINT ["/main"]
+ENTRYPOINT ["/var/task/main"]
