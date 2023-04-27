@@ -96,7 +96,7 @@ func scrapeNavercode(code int, baseURL string, c chan<- extractedInfo) {
 		naverCode: code}
 }
 
-// map을 json 형태로 변환 후 makingFileName에서 나온 이름으로 파일 쓰기
+// map을 json 형태로 변환 후 파일 쓰기
 func writeFile(fileName string, INFO map[string][]map[string]interface{}) {
 	content, _ := json.MarshalIndent(INFO, "", " ")
 	_ = os.WriteFile(fileName, content, 0644)
