@@ -4,11 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
-	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"log"
 	"net/http"
 	"os"
@@ -16,6 +11,12 @@ import (
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 type extractedInfo struct {
@@ -95,20 +96,6 @@ func scrapeNavercode(code int, baseURL string, c chan<- extractedInfo) {
 		naverCode: code}
 }
 
-// writeFile 함수에서 사용할 파일 이름(연_월_일_subwayinformation.json)을 만드는 함수
-func makingFileName() string {
-	loc, err := time.LoadLocation("Asia/Seoul")
-	if err != nil {
-		panic(err)
-	}
-	now := time.Now()
-	t := now.In(loc)
-	fileTime := t.Format("2006_01_02")
-	fileName := fileTime + "_subway_information.json"
-
-	return fileName
-}
-
 // map을 json 형태로 변환 후 makingFileName에서 나온 이름으로 파일 쓰기
 func writeFile(fileName string, INFO map[string][]map[string]interface{}) {
 	content, _ := json.MarshalIndent(INFO, "", " ")
@@ -143,7 +130,7 @@ func HandleRequest(ctx context.Context) (string, error) {
 	}
 
 	// 크롤링 결과 파일로 저장하기
-	fileName := makingFileName()
+	fileName := "subway_information.json"
 	lambdaFileName := "/tmp/" + fileName
 	writeFile(lambdaFileName, INFO)
 	end := time.Since(start)
