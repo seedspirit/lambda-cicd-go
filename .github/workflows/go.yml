@@ -7,7 +7,7 @@ on:
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   ECR_REPOSITORY: findcode_docker_test
-  LAMBDA_FUNCTION_NAME: githubaction-go
+  LAMBDA_FUNCTION_NAME: NavercodeCrawler-Go
 
 permissions:
   contents: read
